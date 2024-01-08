@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(255, 245, 220, 255);
+            margin: 20px;
+            padding: 0;
+            height: 100px;
+        }
+
+        header {
+            background-color: #300505;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: rgba(255, 245, 220, 255);
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 245, 220, 255);
+            color: #300505;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="homepage.html">Home</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="ContactUs.html">Contact Us</a>
+            <a href="Sitemap.html">Sitemap</a>
+            <a href="products.html">products</a>
+            <a href="review.html">review</a>
+			<a href="form.html">Ask for products</a>
+        </nav>
+    </header>
+
+    <div class="container">
+		<div class="row">
+			<div class="col-3 offset-11" style="background-color:white">
+				<span id="header" > </span>
+			</div>
+		</div>
+        <div class="row">
+            <div class="col-12">
+				<form action="#" method="post">
+					<div class="row mt-3">
+						<div class="col-2"> Gender: </div>
+						<div class="col-2"> 
+							<input type="radio" id="male" name="gender" value="1">
+							<label for="male">Male</label>
+						</div>
+						<div class="col-2">
+							<input type="radio" id="female" name="gender" value="2">
+							<label for="female">Female</label>
+						</div>
+						<div class="col" style="color:red" id="genderMsg" hidden> please select one.</div>
+					</div>
+					<div class="row">
+						<div class="col-2"> Enter the quantity: </div>
+						<div class="col-4"> 
+							<input type="number" id="quantity" name="quantity">
+						</div>
+						<div class="col" style="color:red" id="quantityMsg" hidden> please enter valid number.</div>
+					</div>
+					<div class="row">
+						<div class="col-2"> select the products: </div>
+						<div class="col-1"> 
+							<input type="checkbox" id="formal" name="formal" value="0">
+							<label for="formal"> formal</label><br>
+						</div>
+						<div class="col-1"> 
+							<input type="checkbox" id="classy" name="classy" value="1">
+							<label for="classy"> classy</label><br>
+						</div>
+						<div class="col-2"> 
+							<input type="checkbox" id="casual" name="casual" value="2">
+							<label for="casual"> casual</label><br>
+						</div>
+						<div class="col" style="color:red" id="ProductsMsg" hidden> please select at least one.</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<button type="button" onclick="submitValues()">Submit</button>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<textarea id="message" name="message" rows="6" cols="50" ></textarea>
+						</div>
+					</div>
+					
+					
+				</form>
+				
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<script>
+	function submitValues(){
+		var valid = true;
+		var genderSelected = IsGenderSelected();
+		if(!genderSelected){
+			document.getElementById("genderMsg").hidden = false;
+			valid = false;
+		}
+		else{
+			document.getElementById("genderMsg").hidden = true;
+		}
+		
+		var quantityIn = document.getElementById("quantity").value;
+		if(quantityIn == "" || quantityIn < 1){
+			document.getElementById("quantityMsg").hidden = false;
+			valid = false;
+		}
+		else{
+			document.getElementById("quantityMsg").hidden = true;
+		}
+		
+		var productSelected = checkProductsSelected();
+		if(!productSelected){
+			document.getElementById("ProductsMsg").hidden = false;
+			valid = false;
+		}else{
+			document.getElementById("ProductsMsg").hidden = true;	
+		}
+		
+		if(!valid){
+			return false;
+		}
+		else{
+			var genderText = "";
+			var gender = document.querySelector('input[name="gender"]:checked').value;
+			if(gender == "1"){
+				genderText = "Male";
+			}else {genderText = "Female";}
+			
+			var productsTexts = "";
+			if(GlobelFormal){
+			 productsTexts += "Formal, ";
+			}
+			if(GlobalClassy){
+			 productsTexts += "Classy, ";
+			}
+			if(GlobalCasual){
+			 productsTexts += "Casual";
+			}
+			
+			var textareaElement = document.getElementById("message");
+			textareaElement.value = " Gender: "+genderText+"\n"+" Quantity: "+quantityIn+"\n"+ " Products: "+productsTexts;
+        
+		}
+		
+	}
+	function IsGenderSelected(){
+		var valid = false;
+		var maleRadioButton = document.getElementById("male");
+        var femaleRadioButton = document.getElementById("female");
+        if (maleRadioButton.checked) {
+			valid = true;
+        } else if (femaleRadioButton.checked) {
+            valid = true;
+        }
+		return valid;
+	}
+	
+	var GlobelFormal = false;
+	var GlobalClassy = false;
+	var GlobalCasual = false;
+	 function checkProductsSelected() {
+		 GlobelFormal = false;
+	 GlobalClassy = false;
+	 GlobalCasual = false;
+            var valid = false;
+            var formalCheckbox = document.getElementsByName("formal")[0];
+            var classyCheckbox = document.getElementsByName("classy")[0];
+            var casualCheckbox = document.getElementsByName("casual")[0];
+
+            
+            if (formalCheckbox.checked) {
+                valid = true;
+				GlobelFormal = true;
+            }
+            if (classyCheckbox.checked) {
+                valid = true;
+				GlobalClassy = true;
+            }
+            if (casualCheckbox.checked) {
+                valid = true;
+				GlobalCasual = true;
+            }
+			return valid;
+    }
+	
+	
+	 function updateHeader() {
+            var headerElement = document.getElementById("header");
+            var currentDate = new Date();
+            var formattedDate = currentDate.toLocaleDateString();
+            var currentTime = currentDate.toLocaleTimeString();
+            var dateTimeString = "Date: " + formattedDate + " | Time: " + currentTime;
+
+            headerElement.innerHTML = "" + dateTimeString + "";
+        }
+
+        // Call the function when the page loads
+        window.onload = function () {
+            updateHeader();
+        };
+		
+	
+</script>
